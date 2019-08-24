@@ -28,7 +28,6 @@ public class CameraMove : MonoBehaviour
          }
          if (dif > 6f)  // 카메라와 플레이어 위치 간격이 6보다 크면 왼쪽으로 카메라 이동 / 수치는 변경 가능 및 임의로 설정한 것 보기 좋은 각도로
         {
-            {
             temp.x -= (dif - 6f);
          }
             
