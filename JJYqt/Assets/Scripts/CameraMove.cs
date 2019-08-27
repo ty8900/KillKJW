@@ -12,12 +12,15 @@ public class CameraMove : MonoBehaviour
     float cam_x;
     float cam_y;
     float cam_z;
+    float fix_y;
     private void Start()
     {
       
         cam_x = transform.position.x;
         cam_y = transform.position.y;
         cam_z = transform.position.z;
+        fix_y = player.transform.position.y;
+
 
     }
 
@@ -26,7 +29,7 @@ public class CameraMove : MonoBehaviour
         float pos_x = player.transform.position.x;
         float pos_y = player.transform.position.y;
         float pos_z = player.transform.position.z;
-        transform.position = new Vector3(pos_x+500, pos_y+120, cam_z+pos_z);
+        transform.position = new Vector3(pos_x+500, fix_y+120, cam_z+pos_z);
     }
 
     // Start is called before the first frame update
