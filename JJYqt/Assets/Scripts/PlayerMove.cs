@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    public static GameObject Map;
+    GameObject Wall;
     public float movespeed;
     public float moveforce;
 
@@ -12,6 +14,8 @@ public class PlayerMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Map = GameObject.Find(GameManager.instance.GetScene());
+        Debug.Log(Map);
         site = transform;
         isGround = true;
         rot = false;
@@ -19,7 +23,8 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject == GameObject.Find("wall"))
+        Wall = Map.transform.Find("wall").gameObject;
+        if (collision.gameObject == Wall)
             isGround = true;
     }
 
