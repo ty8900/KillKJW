@@ -29,10 +29,10 @@ public class CameraMove : MonoBehaviour
         float pos_x = player.transform.position.x;
         float pos_y = player.transform.position.y;
         float pos_z = player.transform.position.z;
-        if( (pos_x+250) >= 641 && (pos_x+250) <= 1919) transform.position = new Vector3(pos_x+250, fix_y+120, cam_z+pos_z);
+        if( (pos_x+250) >= 671 && (pos_x+250) <= 1919) transform.position = new Vector3(pos_x+250, fix_y+120, cam_z+pos_z);
     }
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update 671
     /*
     void Start()
     {
