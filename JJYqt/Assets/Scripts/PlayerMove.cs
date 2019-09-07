@@ -10,6 +10,9 @@ public class PlayerMove : MonoBehaviour
     public float moveforce;
     public float posx, posy, posz;
     public int HPcon;
+    Color damageColor;
+    public Material damagedMaterial;
+    
 
     private Transform site;
     private bool isJump,isGround,rot;//점프가능/땅에닿은 여부/왼쪽오른쪽 바라보는 방향
@@ -22,6 +25,7 @@ public class PlayerMove : MonoBehaviour
         isGround = true;
         rot = false;
         HPcon = 1;
+        damageColor = new Color(111f, 111f, 111f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -45,7 +49,14 @@ public class PlayerMove : MonoBehaviour
         float save = movespeed;
         movespeed = 0;
         HPcon = 0;
-        yield return new WaitForSeconds(0.5f);
+        SpriteRenderer rend = GetComponent<SpriteRenderer>();
+        Material original = rend.material;
+        for(int i=10; i>0; i--)
+        {
+            if (i % 2 == 0) rend.material = damagedMaterial;
+            else rend.material = original;
+            yield return new WaitForSeconds(0.05f);
+        }
         movespeed = save;
         HPcon = 1;
     }
