@@ -40,7 +40,8 @@ public class PlayerMove : MonoBehaviour
             posy = transform.position.y;
             posz = transform.position.z;
             Stats.instance.minusHP();
-            transform.position = new Vector3(posx-150f, posy, posz);
+            if(rot==true) transform.position = new Vector3(posx-150f, posy, posz);
+            else transform.position = new Vector3(posx + 150f, posy, posz);
             StartCoroutine("waitPlayer");
         }
     }
