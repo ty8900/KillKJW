@@ -8,6 +8,8 @@ public class PlayerMove : MonoBehaviour
     GameObject Wall;
     public float movespeed;
     public float moveforce;
+    public float posx, posy, posz;
+    public int HPcon;
 
     private Transform site;
     private bool isJump,isGround,rot;//점프가능/땅에닿은 여부/왼쪽오른쪽 바라보는 방향
@@ -19,13 +21,33 @@ public class PlayerMove : MonoBehaviour
         site = transform;
         isGround = true;
         rot = false;
+        HPcon = 1;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Wall = Map.transform.Find("wall").gameObject;
+        Debug.Log(collision.gameObject.tag);
         if (collision.gameObject == Wall)
             isGround = true;
+        if(collision.gameObject.tag == "enemy" && HPcon==1 )
+        {
+            posx = transform.position.x;
+            posy = transform.position.y;
+            posz = transform.position.z;
+            Stats.instance.minusHP();
+            transform.position = new Vector3(posx-150f, posy, posz);
+            StartCoroutine("waitPlayer");
+        }
+    }
+    IEnumerator waitPlayer()
+    {
+        float save = movespeed;
+        movespeed = 0;
+        HPcon = 0;
+        yield return new WaitForSeconds(0.5f);
+        movespeed = save;
+        HPcon = 1;
     }
 
     // Update is called once per frame
