@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    public static PlayerMove instance;
     public static GameObject Map;
     GameObject Wall;
     public float movespeed;
     public float moveforce;
     public float posx, posy, posz;
-    public int HPcon;
+    public int HPcon; // HP control
     Color damageColor;
     public Material damagedMaterial;
-    
+    public GameObject Weapon;
+    public int Attackcon=0; // Attack control attack 도중 또 attack 불가
 
     private Transform site;
     private bool isJump,isGround,rot;//점프가능/땅에닿은 여부/왼쪽오른쪽 바라보는 방향
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         Map = GameObject.Find(GameManager.instance.GetScene());
         Debug.Log(Map);
         site = transform;
@@ -40,7 +43,7 @@ public class PlayerMove : MonoBehaviour
             posy = transform.position.y;
             posz = transform.position.z;
             Stats.instance.minusHP();
-            if(rot==true) transform.position = new Vector3(posx-150f, posy, posz);
+            if(collision.gameObject.transform.position.x > posx) transform.position = new Vector3(posx-150f, posy, posz);
             else transform.position = new Vector3(posx + 150f, posy, posz);
             StartCoroutine("waitPlayer");
         }
@@ -51,15 +54,37 @@ public class PlayerMove : MonoBehaviour
         movespeed = 0;
         HPcon = 0;
         SpriteRenderer rend = GetComponent<SpriteRenderer>();
+        SpriteRenderer rend2 = Weapon.GetComponent<SpriteRenderer>();
         Material original = rend.material;
         for(int i=10; i>0; i--)
         {
-            if (i % 2 == 0) rend.material = damagedMaterial;
-            else rend.material = original;
+            if (i % 2 == 0) { rend.material = damagedMaterial; rend2.material = damagedMaterial; }
+            else { rend.material = original; rend2.material = original; }
             yield return new WaitForSeconds(0.05f);
         }
         movespeed = save;
         HPcon = 1;
+    }
+
+    IEnumerator Attack()
+    {
+        Attackcon = 1;
+        float rox = Weapon.transform.eulerAngles.x;
+        float roy = Weapon.transform.eulerAngles.y;
+        float roz = Weapon.transform.eulerAngles.z;
+        Quaternion q=Weapon.transform.rotation;
+        for (int i=10; i>0; i--)
+        {
+            if (rot) roy = 0;
+            else roy = 180;
+            Debug.Log(i+" "+roz);
+            if (i > 5) roz -= 10;
+            else  roz += 10;
+            q = Quaternion.Euler(rox, roy, roz);
+            Weapon.transform.rotation = q;
+            yield return new WaitForSeconds(0.02f);
+        }
+        Attackcon = 0;
     }
 
     // Update is called once per frame
@@ -79,6 +104,11 @@ public class PlayerMove : MonoBehaviour
         {
             isJump = true;
             isGround = false;
+        }
+        if (Input.GetKeyDown(KeyCode.A) && Attackcon==0)
+        {
+            Debug.Log("oak");
+            StartCoroutine("Attack");
         }
     }
     void FixedUpdate()
