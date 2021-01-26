@@ -1,2 +1,2 @@
 # KillKJW
-Unity PC RPG game project with two trashes
+Unity PC RPG game project
